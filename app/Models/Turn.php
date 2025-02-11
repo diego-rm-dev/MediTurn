@@ -18,5 +18,4 @@ class Turn extends Model
     {
         return $this->belongsTo(Specialty::class);
     }
-
 }
