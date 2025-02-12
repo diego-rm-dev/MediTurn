@@ -3,6 +3,7 @@
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\TurnController;
 use App\Livewire\AdminDashboard;
+use App\Livewire\CreateUser;
 use App\Livewire\PatientDashboard;
 use App\Livewire\WaitingRoom;
 use App\Models\User;
@@ -21,6 +22,7 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
     Route::get('/admin/users', AdminDashboard::class)->name('users.index');
+    Route::get('/admin/users/crear', CreateUser::class)->name('users.create');
 });
 
 
