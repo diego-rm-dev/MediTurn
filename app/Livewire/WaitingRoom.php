@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Turn;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class WaitingRoom extends Component
@@ -12,6 +13,8 @@ class WaitingRoom extends Component
     // Aquí defines el layout correcto
 
     #[Layout('layouts.client')] // Aquí defines el layout correcto
+
+
     public $turnsGynecology;
     public $turnsPediatrics;
     public $turnsCardiology;
@@ -20,6 +23,8 @@ class WaitingRoom extends Component
     public $alertMessage = null;
 
     public $turnDelete;
+
+    protected $listeners = ['turnsUpdated' => 'loadTurns']; // ✅ Escuchar evento
 
     public function mount()
     {

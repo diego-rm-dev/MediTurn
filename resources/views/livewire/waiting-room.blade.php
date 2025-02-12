@@ -1,4 +1,4 @@
-<div style="display: flex; justify-content: center; gap: 3rem; padding: 3rem;">
+<div wire:poll.500ms="loadTurns" style="display: flex; justify-content: center; gap: 3rem; padding: 3rem;">
     @foreach (['Pediatrics' => $turnsPediatrics, 'Gynecology' => $turnsGynecology, 'Cardiology' => $turnsCardiology] as $specialty => $turns)
     <div style="background-color: #009688; display: flex; flex-direction:column; justify-content: space-between; border-radius: 16px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); padding: 2rem; width: 26rem; color: white;">
 
