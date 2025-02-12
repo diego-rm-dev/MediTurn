@@ -2,45 +2,33 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class UpdateUser extends Component
 {
-    public $userId, $name, $email, $password;
+    public $userId, $name, $email, $role;
 
-    protected $rules = [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email',
-        'password' => 'nullable|string|min:6',
-    ];
-
-    protected $listeners = ['editUser'];
-
-    public function editUser($id)
+    public function mount($user)
     {
-        $user = User::findOrFail($id);
-        $this->userId = $user->id;
-        $this->name = $user->name;
-        $this->email = $user->email;
+        $usuario = User::findOrFail($user);
+        $this->userId = $usuario->id;
+        $this->name = $usuario->name;
+        $this->email = $usuario->email;
+        $this->role = $usuario->role;
     }
 
-    public function update()
+    public function updateUser()
     {
-        $this->validate([
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->userId)],
-        ]);
-
-        $user = User::findOrFail($this->userId);
-        $user->update([
+        $usuario = User::findOrFail($this->userId);
+        $usuario->update([
             'name' => $this->name,
             'email' => $this->email,
-            'password' => $this->password ? Hash::make($this->password) : $user->password,
+            'role' => $this->role
         ]);
 
         session()->flash('message', 'Usuario actualizado correctamente.');
-
-        $this->emit('userUpdated'); // Emitir evento para actualizar la lista
     }
 
     public function render()

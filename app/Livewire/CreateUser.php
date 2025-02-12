@@ -33,8 +33,7 @@ class CreateUser extends Component
         // Reiniciar los campos después de la creación
         $this->reset(['name', 'email', 'password']);
 
-        // Emitir evento para actualizar la lista de usuarios
-        $this->emit('userCreated');
+       
     }
 
     public function render()

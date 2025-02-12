@@ -24,7 +24,7 @@ Route::middleware([
     })->name('dashboard');
     Route::get('/admin/users', AdminDashboard::class)->name('users.index');
     Route::get('/admin/users/crear', CreateUser::class)->name('users.create');
-    Route::get('/admin/users/actualizar', UpdateUser::class)->name('users.update');
+    Route::get('/admin/users/{user}/actualizar', UpdateUser::class)->name('users.update');
 });
 
 

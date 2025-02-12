@@ -1,31 +1,23 @@
-<div class="p-6 bg-white shadow-md rounded-lg">
-    <h2 class="text-xl font-bold mb-4">Actualizar Usuario</h2>
+<div class="p-6 bg-gray-100">
+    <h2 class="text-2xl font-bold mb-4">Editar Usuario</h2>
 
     @if (session()->has('message'))
-    <div class="p-2 mb-2 text-green-600 bg-green-100 rounded">
-        {{ session('message') }}
-    </div>
+    <div class="text-green-500">{{ session('message') }}</div>
     @endif
 
-    <form wire:submit.prevent="update">
-        <div class="mb-4">
-            <label for="name" class="block font-medium">Nombre</label>
-            <input type="text" id="name" wire:model="name" class="w-full border-gray-300 rounded-lg p-2">
-            @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+    <form wire:submit.prevent="updateUser">
+        <label class="block">Nombre:</label>
+        <input type="text" wire:model="name" class="border p-2 w-full">
 
-        <div class="mb-4">
-            <label for="email" class="block font-medium">Correo Electrónico</label>
-            <input type="email" id="email" wire:model="email" class="w-full border-gray-300 rounded-lg p-2">
-            @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+        <label class="block mt-2">Email:</label>
+        <input type="email" wire:model="email" class="border p-2 w-full">
 
-        <div class="mb-4">
-            <label for="password" class="block font-medium">Nueva Contraseña (opcional)</label>
-            <input type="password" id="password" wire:model="password" class="w-full border-gray-300 rounded-lg p-2">
-            @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+        <label class="block mt-2">Rol:</label>
+        <select wire:model="role" class="border p-2 w-full">
+            <option value="admin">Admin</option>
+            <option value="user">Usuario</option>
+        </select>
 
-        <button type="submit" class="bg-[#01BFA5] text-white py-2 px-4 rounded-lg">Actualizar Usuario</button>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Actualizar</button>
     </form>
 </div>

@@ -8,6 +8,10 @@ use Livewire\Component;
 class AdminDashboard extends Component
 {
 
+    public function edit($userId)
+    {
+        return redirect()->route('users.update', ['user' => $userId]);
+    }
 
     public function render()
     {

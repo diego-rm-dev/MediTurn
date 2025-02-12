@@ -1,4 +1,6 @@
 <div class="p-6 bg-white shadow-md rounded-lg">
+
+    <a href="{{route('users.index')}}" class="p-4">Regresar</a>
     <h2 class="text-xl font-bold mb-4">Crear Usuario</h2>
 
     @if (session()->has('message'))
