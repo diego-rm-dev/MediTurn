@@ -28,13 +28,9 @@ class PatientDashboard extends Component
             'patientDocument' => 'required|string|max:20'
         ]);
 
-        // Generar una letra aleatoria de la A-Z
-        $randomLetter = chr(rand(65, 90));
-
-        // Generar un número aleatorio de 3 dígitos
+        // Generar un código de turno aleatorio
+        $randomLetter = chr(rand(65, 90)); // Letra A-Z
         $randomNumber = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
-
-        // Concatenar para formar el código de turno
         $this->generatedTurn = "{$randomLetter}-{$randomNumber}";
 
         // Guardar en la base de datos
@@ -44,16 +40,17 @@ class PatientDashboard extends Component
             'specialty_id' => $this->selectedSpecialty->id,
             'status' => 'pending'
         ]);
-
-        session()->flash('message', "Turno generado con éxito: {$this->generatedTurn}");
-
-        // Esperar 5 segundos antes de reiniciar automáticamente
-        sleep(5);
-
-        // Redirigir al componente para reiniciar
-        return redirect()->route('patient.dashboard');
     }
 
+    // Método para cerrar el modal
+    public function closeModal()
+    {
+        $this->generatedTurn = null;
+        $this->patientDocument = null; // Limpiar el campo del documento
+        $this->selectedSpecialty = null;
+        $this->step = 1; // Regresar al paso 1
+    }
+    
 
     public function render()
     {
