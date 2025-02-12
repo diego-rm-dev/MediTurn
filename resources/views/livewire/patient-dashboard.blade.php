@@ -186,4 +186,24 @@
         </div>
     </div>
 @endif
+@if ($pdfUrl)
+    <iframe id="pdfFrame" src="{{ asset($pdfUrl) }}" style="display:none;"></iframe>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var iframe = document.getElementById("pdfFrame");
+
+            if (iframe) {
+                iframe.onload = function () {
+                    console.log("PDF cargado, enviando a impresión...");
+                    iframe.contentWindow.print();
+                };
+            } else {
+                console.error("El iframe no se encontró.");
+            }
+        });
+    </script>
+@endif
+
+
 </div>
