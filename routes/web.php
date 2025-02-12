@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\SpecialtyController;
+use App\Http\Controllers\TurnController;
+use App\Livewire\PatientDashboard;
+use App\Livewire\WaitingRoom;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +19,13 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+
+// Especialidades
+Route::get('/specialties', [SpecialtyController::class, 'index'])->name('specialties.index');
+
+// Turnos
+Route::get('/turns', [TurnController::class, 'index'])->name('turns.index');
+
+Route::get('/waiting-room', WaitingRoom::class);
+Route::get('/patient-dashboard', PatientDashboard::class)->name('patient.dashboard');

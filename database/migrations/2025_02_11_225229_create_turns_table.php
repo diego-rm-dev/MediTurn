@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('turns', function (Blueprint $table) {
             $table->id();
-            $table->string('turn_number')->unique(); 
-            $table->string('patient_document'); 
-            $table->foreignId('specialty_id')->constrained()->onDelete('cascade'); 
+            $table->string('turn_number')->unique();
+            $table->string('patient_document');
+            $table->foreignId('specialty_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['pending', 'in_progress', 'finished', 'cancelled'])->default('pending');
             $table->timestamps();
         });

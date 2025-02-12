@@ -9,7 +9,7 @@ class Turn extends Model
     protected $fillable = [
         'turn_number',
         'patient_document',
-        'speciality_id',
+        'specialty_id',
         'status',
         'created_at'
     ];
