@@ -53,6 +53,7 @@ class EmployeeDashboard extends Component
         $turnDelete = Turn::find($turnId);
         $turnDelete->delete();
         $this->alertMessage = "El turno {$turnDelete->turn_number} ha sido eliminado.";
+        $this->dispatch('turnsUpdated');
         $this->loadTurns();
     }
 
@@ -74,6 +75,8 @@ class EmployeeDashboard extends Component
             $this->flashMessage = "El turno {$turn->turn_number} ahora está en progreso.";
         }
 
+        $this->dispatch('turnsUpdated');
+
         $this->loadTurns();
     }
 
@@ -86,8 +89,13 @@ class EmployeeDashboard extends Component
 
             $this->flashMessage = "El turno {$turn->turn_number} ha sido completado.";
         }
+
+        dd('Evento turnsUpdated enviado'); // 🔥 Verificar si esto se ejecuta
+
+        $this->dispatch('turnsUpdated');
         $this->loadTurns();
     }
+
 
     public function render()
     {

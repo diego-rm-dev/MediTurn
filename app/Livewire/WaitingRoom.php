@@ -4,14 +4,17 @@ namespace App\Livewire;
 
 use App\Models\Turn;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class WaitingRoom extends Component
 {
-   
+
     // Aquí defines el layout correcto
 
     #[Layout('layouts.client')] // Aquí defines el layout correcto
+
+
     public $turnsGynecology;
     public $turnsPediatrics;
     public $turnsCardiology;
@@ -21,6 +24,8 @@ class WaitingRoom extends Component
 
     public $turnDelete;
 
+    protected $listeners = ['turnsUpdated' => 'loadTurns']; // ✅ Escuchar evento
+
     public function mount()
     {
         $this->loadTurns();
@@ -29,24 +34,24 @@ class WaitingRoom extends Component
     public function loadTurns()
     {
         $this->turnsGynecology = Turn::whereIn('status', ['pending', 'in_progress'])
-        ->where('specialty_id', 2)
-        ->orderByRaw("FIELD(status, 'in_progress', 'pending')")
-        ->orderBy('created_at', 'asc')
-        ->take(5)
+            ->where('specialty_id', 2)
+            ->orderByRaw("FIELD(status, 'in_progress', 'pending')")
+            ->orderBy('created_at', 'asc')
+            ->take(5)
             ->get();
 
         $this->turnsPediatrics = Turn::whereIn('status', ['pending', 'in_progress'])
-        ->where('specialty_id', 3)
-        ->orderByRaw("FIELD(status, 'in_progress', 'pending')")
-        ->orderBy('created_at', 'asc')
-        ->take(5)
+            ->where('specialty_id', 3)
+            ->orderByRaw("FIELD(status, 'in_progress', 'pending')")
+            ->orderBy('created_at', 'asc')
+            ->take(5)
             ->get();
 
         $this->turnsCardiology = Turn::whereIn('status', ['pending', 'in_progress'])
-        ->where('specialty_id', 4)
-        ->orderByRaw("FIELD(status, 'in_progress', 'pending')")
-        ->orderBy('created_at', 'asc')
-        ->take(5)
+            ->where('specialty_id', 4)
+            ->orderByRaw("FIELD(status, 'in_progress', 'pending')")
+            ->orderBy('created_at', 'asc')
+            ->take(5)
             ->get();
     }
 
@@ -66,7 +71,7 @@ class WaitingRoom extends Component
         if ($turn) {
             // Poner en 'pending' los demás turnos "in_progress" SOLO de la misma especialidad
             Turn::where('status', 'in_progress')
-            ->where('specialty_id', $turn->specialty_id)
+                ->where('specialty_id', $turn->specialty_id)
                 ->update(['status' => 'pending']);
 
             // Asignar este turno como "in_progress"
