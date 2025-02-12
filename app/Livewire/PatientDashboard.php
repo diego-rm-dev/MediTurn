@@ -4,6 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Specialty;
 use App\Models\Turn;
+use Barryvdh\DomPDF\DomPDF;
+use Dompdf\Dompdf as DompdfDompdf;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -15,6 +18,7 @@ class PatientDashboard extends Component
     public $selectedSpecialty;
     public $patientDocument;
     public $generatedTurn;
+    public $pdfUrl;
 
     public function selectSpecialty($specialtyId)
     {
@@ -40,7 +44,26 @@ class PatientDashboard extends Component
             'specialty_id' => $this->selectedSpecialty->id,
             'status' => 'pending'
         ]);
+
+        // Generar el PDF con un tamaño fijo de ancho, pero permitiendo que la altura se ajuste con CSS
+        $pdf = new DompdfDompdf();
+        $pdf->setPaper('A7', 'portrait'); // A7 (74x105mm), pequeño para tickets
+        $pdf->loadHtml(view('pdf.turno', [
+            'turn_number' => $this->generatedTurn,
+            'patient_document' => $this->patientDocument,
+            'specialty' => $this->selectedSpecialty->name
+        ])->render());
+
+        $pdf->render();
+
+        // Guardar en "storage/app/public/turnos/"
+        $pdfPath = "turnos/turno_{$this->generatedTurn}.pdf";
+        Storage::disk('public')->put($pdfPath, $pdf->output());
+
+        // Generar la URL pública correctamente
+        $this->pdfUrl = asset("storage/{$pdfPath}");
     }
+
 
     // Método para cerrar el modal
     public function closeModal()
@@ -50,7 +73,7 @@ class PatientDashboard extends Component
         $this->selectedSpecialty = null;
         $this->step = 1; // Regresar al paso 1
     }
-    
+
 
     public function render()
     {

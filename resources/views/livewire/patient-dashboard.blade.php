@@ -1,4 +1,4 @@
-<div class="p-6 bg-white rounded-lg shadow-md min-h-screen flex flex-col justify-center items-center relative">
+<div class="bg-white rounded-lg shadow-md min-h-screen flex flex-col justify-center items-center relative" style="padding: 10%">
     @if ($step === 1)
         {{-- Contenedor del título --}}
         <div class="absolute top-0 left-0 w-full text-center pt-4 md:pt-6 px-4">
@@ -7,28 +7,35 @@
             </h2>
         </div>
 
+        @php
+            $specialtiesCount = count($specialties); // Contamos las especialidades
+            $isOdd = $specialtiesCount % 2 !== 0; // Verificamos si es impar
+            $lastSpecialty = null;
+        @endphp
+
         <div class="w-full max-w-3xl flex flex-col items-center space-y-6">
+            {{-- Grid solo con los pares --}}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                {{-- Generamos los botones dinámicamente --}}
-                @foreach($specialties as $specialty)
+                @foreach($specialties as $index => $specialty)
                     @php
-                        // Obtener la imagen según el internal_code
                         $iconPath = match($specialty->internal_code) {
-                            'GNC' => 'icons/icono-4.svg', // Ginecología
-                            'PDT' => 'icons/icono-3.svg', // Pediatría
-                            'CDG' => 'icons/icono-1.svg', // Cardiología
-                            default => 'icons/default.svg' // Imagen por defecto
+                            'GNC' => 'icons/gynecology.svg',
+                            'PDT' => 'icons/boys.svg',
+                            'CDG' => 'icons/hearth.svg',
+                            default => 'icons/default.svg'
                         };
 
-                        // Detectar si este es el último en un número impar de especialidades
-                        $isLastOdd = ($loop->last && $loop->remaining % 2 == 0);
+                        // Si es el último y la cantidad es impar, lo guardamos y lo excluimos de la grid
+                        if ($isOdd && $loop->last) {
+                            $lastSpecialty = $specialty;
+                            continue;
+                        }
                     @endphp
 
                     <button wire:click="selectSpecialty({{ $specialty->id }})"
                             wire:key="specialty-{{ $specialty->id }}"
                             style="
                                 background-color: #01BFA5;
-                                text-align: left;
                                 width: 100%;
                                 height: 160px;
                                 padding: 1rem 1.5rem;
@@ -36,8 +43,8 @@
                                 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
                                 display: flex;
                                 align-items: center;
-                                justify-content: start;
-                                gap: 2rem;
+                                justify-content: center;
+                                gap: 1rem;
                                 font-size: 1.8rem;
                                 font-weight: 500;
                                 color: white;
@@ -48,53 +55,91 @@
                             onmousedown="this.style.transform='scale(0.95)'"
                             onmouseup="this.style.transform='scale(1)'">
                         <img src="{{ asset($iconPath) }}" alt="{{ $specialty->name }}" style="width: 64px; height: 64px; object-fit: contain;">
-                        <span style="font-size: 1.8rem; font-weight: 500;">
+                        <span style="font-size: 1.8rem; font-weight: 500; text-align: center;">
                             {{ $specialty->name }}
                         </span>
                     </button>
                 @endforeach
             </div>
-        </div>
 
-    @elseif ($step === 2)
-        {{-- Vista de Ingreso de Documento --}}
-        <div class="flex flex-col items-center justify-center min-h-screen">
-            <h2 style="font-size: 2rem; font-weight: 500; margin-bottom: 1.5rem; text-align: center;">
-                Ingresa tu número de documento
-            </h2>
-            
-            <div class="w-full max-w-md">
-                <input type="text" wire:model="patientDocument"
-                       style="width: 100%; border: 1px solid #d1d5db; border-radius: 6px; padding: 12px; text-align: center; font-size: 1.2rem; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);">
-
-                @error('patientDocument') 
-                    <span style="color: red; font-size: 0.9rem; display: block; margin-top: 8px; text-align: center;">{{ $message }}</span> 
-                @enderror
-
-                <button wire:click="generateTurn"
+            {{-- Último elemento centrado si la cantidad es impar --}}
+            @if ($lastSpecialty)
+                <button wire:click="selectSpecialty({{ $lastSpecialty->id }})"
+                        wire:key="specialty-{{ $lastSpecialty->id }}"
                         style="
-                            display: block;
-                            width: 100%;
-                            margin-top: 1.5rem;
-                            background-color: #14b8a6;
+                            background-color: #01BFA5;
+                            width: 48%; /* Ajuste manual para que tenga el mismo tamaño */
+                            height: 160px;
+                            padding: 1rem 1.5rem;
+                            border-radius: 10px;
+                            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 1rem;
+                            font-size: 1.8rem;
+                            font-weight: 500;
                             color: white;
-                            font-size: 1.125rem;
-                            font-weight: 600;
-                            padding: 0.75rem 1.5rem;
-                            border-radius: 0.375rem;
-                            transition: background-color 0.3s, transform 0.2s;
-                            text-align: center;
-                            border: none;
+                            transition: background 0.3s, transform 0.2s;
+                            margin-top: 1rem;
                         "
-                        onmouseover="this.style.backgroundColor='#0f9e8a'"
-                        onmouseout="this.style.backgroundColor='#14b8a6'"
+                        onmouseover="this.style.backgroundColor='#0fa28e'"
+                        onmouseout="this.style.backgroundColor='#01BFA5'"
                         onmousedown="this.style.transform='scale(0.95)'"
                         onmouseup="this.style.transform='scale(1)'">
-                    Generar turno
+                    <img src="{{ asset(match($lastSpecialty->internal_code) {
+                        'GNC' => 'icons/gynecology.svg',
+                        'PDT' => 'icons/boys.svg',
+                        'CDG' => 'icons/hearth.svg',
+                        default => 'icons/default.svg'
+                    }) }}" alt="{{ $lastSpecialty->name }}" style="width: 64px; height: 64px; object-fit: contain;">
+                    <span style="font-size: 1.8rem; font-weight: 500; text-align: center;">
+                        {{ $lastSpecialty->name }}
+                    </span>
                 </button>
-            </div>
+            @endif
         </div>
+    @elseif ($step === 2)
+    {{-- Vista de Ingreso de Documento --}}
+    <div class="flex flex-col items-center justify-center h-auto min-h-[50vh]">
+        <h2 style="font-size: 2rem; font-weight: 500; margin-bottom: 1.5rem; text-align: center;">
+            Ingresa tu número de documento
+        </h2>
+
+        <div class="w-full max-w-md">
+            <input type="text" wire:model="patientDocument"
+                style="width: 100%; border: 1px solid #d1d5db; border-radius: 6px; padding: 12px; text-align: center; font-size: 1.2rem; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);">
+
+            @error('patientDocument') 
+                <span style="color: red; font-size: 0.9rem; display: block; margin-top: 8px; text-align: center;">{{ $message }}</span> 
+            @enderror
+
+            <button wire:click="generateTurn"
+                    style="
+                        display: block;
+                        width: 50%; /* Ajuste de ancho al 50% */
+                        margin: 1.5rem auto 0; /* Centrado horizontalmente */
+                        background-color: #14b8a6;
+                        color: white;
+                        font-size: 1.125rem;
+                        font-weight: 600;
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 0.375rem;
+                        transition: background-color 0.3s, transform 0.2s;
+                        text-align: center;
+                        border: none;
+                    "
+                    onmouseover="this.style.backgroundColor='#0f9e8a'"
+                    onmouseout="this.style.backgroundColor='#14b8a6'"
+                    onmousedown="this.style.transform='scale(0.95)'"
+                    onmouseup="this.style.transform='scale(1)'">
+                Generar turno
+            </button>
+
+        </div>
+    </div>
     @endif
+
 
 {{-- Modal de confirmación --}}
 @if ($generatedTurn)
@@ -141,4 +186,24 @@
         </div>
     </div>
 @endif
+@if ($pdfUrl)
+    <iframe id="pdfFrame" src="{{ asset($pdfUrl) }}" style="display:none;"></iframe>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var iframe = document.getElementById("pdfFrame");
+
+            if (iframe) {
+                iframe.onload = function () {
+                    console.log("PDF cargado, enviando a impresión...");
+                    iframe.contentWindow.print();
+                };
+            } else {
+                console.error("El iframe no se encontró.");
+            }
+        });
+    </script>
+@endif
+
+
 </div>
