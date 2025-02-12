@@ -5,6 +5,7 @@ use App\Http\Controllers\TurnController;
 use App\Livewire\AdminDashboard;
 use App\Livewire\CreateUser;
 use App\Livewire\PatientDashboard;
+use App\Livewire\UpdateUser;
 use App\Livewire\WaitingRoom;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware([
     })->name('dashboard');
     Route::get('/admin/users', AdminDashboard::class)->name('users.index');
     Route::get('/admin/users/crear', CreateUser::class)->name('users.create');
+    Route::get('/admin/users/actualizar', UpdateUser::class)->name('users.update');
 });
 
 
