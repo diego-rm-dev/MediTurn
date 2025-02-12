@@ -15,7 +15,7 @@ class AdminDashboard extends Component
 
     public function render()
     {
-        return view('livewire.admin-dashboard', ["users" => User::all()])->layout('layouts.app');
+        return view('livewire.admin-dashboard', ["users" => User::all()])->layout('layouts.client');
     }
 
     public function delete($id)

@@ -62,6 +62,8 @@ class PatientDashboard extends Component
 
         // Generar la URL pública correctamente
         $this->pdfUrl = asset("storage/{$pdfPath}");
+
+        $this->dispatch('turnsUpdated');
     }
 
 

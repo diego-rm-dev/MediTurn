@@ -24,10 +24,12 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/admin/users', AdminDashboard::class)->name('users.index');
+    
+});
+
+Route::get('/admin/users', AdminDashboard::class)->name('users.index');
     Route::get('/admin/users/crear', CreateUser::class)->name('users.create');
     Route::get('/admin/users/{user}/actualizar', UpdateUser::class)->name('users.update');
-});
 
 
 // Especialidades

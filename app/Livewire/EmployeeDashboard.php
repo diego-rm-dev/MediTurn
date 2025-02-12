@@ -90,8 +90,6 @@ class EmployeeDashboard extends Component
             $this->flashMessage = "El turno {$turn->turn_number} ha sido completado.";
         }
 
-        dd('Evento turnsUpdated enviado'); // 🔥 Verificar si esto se ejecuta
-
         $this->dispatch('turnsUpdated');
         $this->loadTurns();
     }
