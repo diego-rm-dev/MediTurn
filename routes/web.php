@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\TurnController;
 use App\Livewire\AdminDashboard;
 use App\Livewire\CreateUser;
+use App\Livewire\EmployeeDashboard;
 use App\Livewire\PatientDashboard;
 use App\Livewire\UpdateUser;
 use App\Livewire\WaitingRoom;
@@ -35,3 +37,6 @@ Route::get('/specialties', [SpecialtyController::class, 'index'])->name('special
 Route::get('/turns', [TurnController::class, 'index'])->name('turns.index');
 Route::get('/waiting-room', WaitingRoom::class);
 Route::get('/patient-dashboard', PatientDashboard::class)->name('patient.dashboard');
+Route::get('/employee-dashboard', EmployeeDashboard::class)->name('employee.dashboard');
+
+Route::get('/descargar-turno/{turn_number}', [PDFController::class, 'downloadPDF'])->name('descargar.pdf');
